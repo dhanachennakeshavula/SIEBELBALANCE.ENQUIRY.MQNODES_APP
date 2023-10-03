@@ -1,0 +1,77 @@
+
+
+CREATE COMPUTE MODULE SIEBELMQNODES_MF_SiebelResponse
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		 CALL CopyMessageHeaders();
+		-- CALL CopyEntireMessage();
+		-- SET Environment.Variables.MQMD =InputRoot.MQMD;  
+		SET OutputRoot.MQMD =Environment.Variables.MQMD;
+		
+		CREATE FIELD OutputRoot.XMLNSC.MOBILY_BSL_SR_REPLY.SR_HEADER_REPLY;
+		DECLARE outref REFERENCE TO OutputRoot.XMLNSC.MOBILY_BSL_SR_REPLY.SR_HEADER_REPLY;
+		
+		IF EXISTS(InputRoot.XMLNSC.MOBILY_BK_SR_REPLY[]) THEN
+		DECLARE inref REFERENCE TO InputRoot.XMLNSC.MOBILY_BK_SR_REPLY.SR_BK_HEADER_REPLY;
+		
+			
+		
+		SET outref.MsgFormate 				=inref.MsgFormate;
+		SET outref.MsgVersion 				=inref.MsgVersion;
+		SET outref.RequestorUserID 			=inref.RequestorUserID;
+		SET outref.RequestorChannelID 		=inref.RequestorChannelID;
+		SET outref.RequestorLanguage 		=inref.RequestorLanguage;
+		SET outref.RequestorChannelFunction =inref.RequestorChannelFunction;
+		SET outref.RequestorSecurityInfo 	=inref.RequestorSecurityInfo;
+		SET outref.ChannelTransformationID  =inref.ChannelTransformationID;
+		SET outref.SrDate=SUBSTRING(inref.SrDate FROM 1 FOR 4) || SUBSTRING(inref.SrDate FROM 5 FOR 2)||
+		                  SUBSTRING(inref.SrDate FROM 7 FOR 2) || SUBSTRING(inref.SrDate FROM 9 FOR 2)||
+		                  SUBSTRING(inref.SrDate FROM 11 FOR 2) || SUBSTRING(inref.SrDate FROM 13 FOR 2);
+		
+		SET OutputRoot.XMLNSC.MOBILY_BSL_SR_REPLY.ContactNumber   =InputRoot.XMLNSC.MOBILY_BK_SR_REPLY.ContactNumber;
+		SET OutputRoot.XMLNSC.MOBILY_BSL_SR_REPLY.balance         =InputRoot.XMLNSC.MOBILY_BK_SR_REPLY.balance;
+		SET OutputRoot.XMLNSC.MOBILY_BSL_SR_REPLY.CustomerType    =InputRoot.XMLNSC.MOBILY_BK_SR_REPLY.CustomerType;
+		SET OutputRoot.XMLNSC.MOBILY_BSL_SR_REPLY.SAN             =InputRoot.XMLNSC.MOBILY_BK_SR_REPLY.SAN;
+		SET OutputRoot.XMLNSC.MOBILY_BSL_SR_REPLY.CustomerCategory=InputRoot.XMLNSC.MOBILY_BK_SR_REPLY.CustomerCategory;
+		SET OutputRoot.XMLNSC.MOBILY_BSL_SR_REPLY.Packagedetails  =InputRoot.XMLNSC.MOBILY_BK_SR_REPLY.Packagedetails;
+		SET OutputRoot.XMLNSC.MOBILY_BSL_SR_REPLY.ErrorCode ='0000';
+		SET OutputRoot.XMLNSC.MOBILY_BSL_SR_REPLY.ErrorMessage = 'success'; 
+		
+		ELSE
+			
+			SET OutputRoot.MQMD = Environment.Variables.MQMD;
+		
+			-- need to construction the siebel response based on BRM response		
+			CREATE FIELD OutputRoot.XMLNSC.MOBILY_BSL_SR_REPLY.SR_HEADER_REPLY;
+			DECLARE Outref REFERENCE TO OutputRoot.XMLNSC.MOBILY_BSL_SR_REPLY.SR_HEADER_REPLY;
+			
+			--BRM response reference
+			DECLARE envReff REFERENCE TO  Environment.Variables.WholeMessage;
+			
+			--input tags and output tags same 
+			SET Outref = envReff.MOBILY_BSL_SR.SR_HEADER;
+			
+			SET OutputRoot.XMLNSC.MOBILY_BSL_SR_REPLY.MSISDN = envReff.MOBILY_BSL_SR.MSISDN;
+			SET OutputRoot.XMLNSC.MOBILY_BSL_SR_REPLY.ErrorCode ='19799';
+			SET OutputRoot.XMLNSC.MOBILY_BSL_SR_REPLY.ErrorMessage = 'timeout from BRM';   
+			
+		END IF;
+		--BRM response reference
+		
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		SET OutputRoot = InputRoot;
+	END;
+END MODULE;

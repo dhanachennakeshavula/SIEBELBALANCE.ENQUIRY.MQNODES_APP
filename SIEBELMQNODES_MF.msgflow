@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ComIbmCompute.msgnode="ComIbmCompute.msgnode" xmlns:ComIbmMQGet.msgnode="ComIbmMQGet.msgnode" xmlns:ComIbmMQInput.msgnode="ComIbmMQInput.msgnode" xmlns:ComIbmMQOutput.msgnode="ComIbmMQOutput.msgnode" xmlns:ComIbmMQReply.msgnode="ComIbmMQReply.msgnode" xmlns:Commonauditsf.subflow="Commonauditsf.subflow" xmlns:Exceptionhandling.subflow="Exceptionhandling.subflow" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:eflow="http://www.ibm.com/wbi/2005/eflow"
+    xmlns:utility="http://www.ibm.com/wbi/2005/eflow_utility" nsURI="SIEBELMQNODES_MF.msgflow" nsPrefix="SIEBELMQNODES_MF.msgflow">
+  <eClassifiers xmi:type="eflow:FCMComposite" name="FCMComposite_1" nodeLayoutStyle="RECTANGLE">
+    <eSuperTypes href="http://www.ibm.com/wbi/2005/eflow#//FCMBlock"/>
+    <translation xmi:type="utility:TranslatableString" key="SIEBELMQNODES_MF" bundleName="SIEBELMQNODES_MF" pluginId="SIEBELBALANCE.ENQUIRY.MQNODES_APP"/>
+    <colorGraphic16 xmi:type="utility:GIFFileGraphic" resourceName="platform:/plugin/SIEBELBALANCE.ENQUIRY.MQNODES_APP/icons/full/obj16/SIEBELMQNODES_MF.gif"/>
+    <colorGraphic32 xmi:type="utility:GIFFileGraphic" resourceName="platform:/plugin/SIEBELBALANCE.ENQUIRY.MQNODES_APP/icons/full/obj30/SIEBELMQNODES_MF.gif"/>
+    <composition>
+      <nodes xmi:type="ComIbmMQInput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_1" location="8,122" queueName="MOBILY.FUNC.SIEBEL.BALANCE.INQ.REQ " messageDomainProperty="XMLNSC">
+        <translation xmi:type="utility:ConstantString" string="MQ Input"/>
+      </nodes>
+      <nodes xmi:type="ComIbmMQOutput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_2" location="408,109" queueName="MOBILY.BRM.BALANCE.INQ.REQ" transactionMode="no">
+        <translation xmi:type="utility:ConstantString" string="MQ Output"/>
+      </nodes>
+      <nodes xmi:type="ComIbmMQGet.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_3" location="618,104" queueName="MOBILY.FUNC.BRM.BALANCE.INQ.RES" messageDomainProperty="XMLNSC" waitInterval="60000" getWithCorrelID="true">
+        <translation xmi:type="utility:ConstantString" string="MOBILY.FUNC.BRM.BALANCE.INQ.RES"/>
+      </nodes>
+      <nodes xmi:type="ComIbmMQReply.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_4" location="1139,104">
+        <translation xmi:type="utility:ConstantString" string="MQ Reply"/>
+      </nodes>
+      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_5" location="201,146" computeExpression="esql://routine/#SIEBELMQNODES_MF_SiebelsendReqtoBRM.Main">
+        <translation xmi:type="utility:ConstantString" string="SiebelsendReqtoBRM"/>
+      </nodes>
+      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_6" location="536,186" computeExpression="esql://routine/#SIEBELMQNODES_MF_MQHEADER.Main" computeMode="destinationAndMessage">
+        <translation xmi:type="utility:ConstantString" string="MQHEADER"/>
+      </nodes>
+      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_7" location="956,117" transaction="commit" computeExpression="esql://routine/#SIEBELMQNODES_MF_SiebelResponse.Main">
+        <translation xmi:type="utility:ConstantString" string="SiebelResponse"/>
+      </nodes>
+      <nodes xmi:type="Commonauditsf.subflow:FCMComposite_1" xmi:id="FCMComposite_1_8" location="88,23" computeExpression="esql://routine/#&quot;SIEBELMQNODES_MF_AUD.SIEBELREQUEST&quot;.Main" computeExpression.internal_npcompiler="com.ibm.etools.mft.ibmnodes.compilers.EsqlModulePropertyCompiler">
+        <translation xmi:type="utility:ConstantString" string="AUD.SIEBELREQUEST"/>
+      </nodes>
+      <nodes xmi:type="Commonauditsf.subflow:FCMComposite_1" xmi:id="FCMComposite_1_9" location="295,23" computeExpression="esql://routine/#&quot;SIEBELMQNODES_MF_AUDI.BRMREQUEST&quot;.Main" computeExpression.internal_npcompiler="com.ibm.etools.mft.ibmnodes.compilers.EsqlModulePropertyCompiler">
+        <translation xmi:type="utility:ConstantString" string="AUDI.BRMREQUEST"/>
+      </nodes>
+      <nodes xmi:type="Commonauditsf.subflow:FCMComposite_1" xmi:id="FCMComposite_1_10" location="813,21" computeExpression="esql://routine/#&quot;SIEBELMQNODES_MF_AUDI.BRMRESPONSE&quot;.Main" computeExpression.internal_npcompiler="com.ibm.etools.mft.ibmnodes.compilers.EsqlModulePropertyCompiler">
+        <translation xmi:type="utility:ConstantString" string="AUDI.BRMRESPONSE"/>
+      </nodes>
+      <nodes xmi:type="Commonauditsf.subflow:FCMComposite_1" xmi:id="FCMComposite_1_11" location="1272,19" computeExpression="esql://routine/#&quot;SIEBELMQNODES_MF_AUDIT.Replytosiebel&quot;.Main" computeExpression.internal_npcompiler="com.ibm.etools.mft.ibmnodes.compilers.EsqlModulePropertyCompiler">
+        <translation xmi:type="utility:ConstantString" string="AUDIT.Replytosiebel"/>
+      </nodes>
+      <nodes xmi:type="Exceptionhandling.subflow:FCMComposite_1" xmi:id="FCMComposite_1_12" location="82,345" computeExpression="esql://routine/#SIEBELMQNODES_MF_Exceptionhandling.Main">
+        <translation xmi:type="utility:ConstantString" string="Exceptionhandling"/>
+      </nodes>
+      <nodes xmi:type="Commonauditsf.subflow:FCMComposite_1" xmi:id="FCMComposite_1_13" location="984,340" computeExpression="esql://routine/#&quot;SIEBELMQNODES_MF_Audit.EXCEPTIONAUDITING&quot;.Main" computeExpression.internal_npcompiler="com.ibm.etools.mft.ibmnodes.compilers.EsqlModulePropertyCompiler">
+        <translation xmi:type="utility:ConstantString" string="Audit.EXCEPTIONAUDITING"/>
+      </nodes>
+      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_14" location="308,347" computeExpression="esql://routine/#SIEBELMQNODES_MF_Exceptioninfo_Replytosiebel.Main">
+        <translation xmi:type="utility:ConstantString" string="Exceptioninfo_Replytosiebel"/>
+      </nodes>
+      <nodes xmi:type="ComIbmMQReply.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_15" location="606,343">
+        <translation xmi:type="utility:ConstantString" string="MQ Reply1"/>
+      </nodes>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_10" targetNode="FCMComposite_1_6" sourceNode="FCMComposite_1_2" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_11" targetNode="FCMComposite_1_3" sourceNode="FCMComposite_1_6" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_13" targetNode="FCMComposite_1_4" sourceNode="FCMComposite_1_7" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_1" targetNode="FCMComposite_1_8" sourceNode="FCMComposite_1_1" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.Input"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_2" targetNode="FCMComposite_1_5" sourceNode="FCMComposite_1_8" sourceTerminalName="OutTerminal.Output" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_4" targetNode="FCMComposite_1_9" sourceNode="FCMComposite_1_5" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.Input"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_5" targetNode="FCMComposite_1_2" sourceNode="FCMComposite_1_9" sourceTerminalName="OutTerminal.Output" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_6" targetNode="FCMComposite_1_10" sourceNode="FCMComposite_1_3" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.Input"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_7" targetNode="FCMComposite_1_7" sourceNode="FCMComposite_1_10" sourceTerminalName="OutTerminal.Output" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_8" targetNode="FCMComposite_1_11" sourceNode="FCMComposite_1_4" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.Input"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_9" targetNode="FCMComposite_1_12" sourceNode="FCMComposite_1_1" sourceTerminalName="OutTerminal.catch" targetTerminalName="InTerminal.Input"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_15" targetNode="FCMComposite_1_15" sourceNode="FCMComposite_1_14" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_14" targetNode="FCMComposite_1_14" sourceNode="FCMComposite_1_12" sourceTerminalName="OutTerminal.Output" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_16" targetNode="FCMComposite_1_13" sourceNode="FCMComposite_1_15" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.Input"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_17" targetNode="FCMComposite_1_7" sourceNode="FCMComposite_1_3" sourceTerminalName="OutTerminal.noMessage" targetTerminalName="InTerminal.in"/>
+    </composition>
+    <propertyOrganizer/>
+    <stickyBoard/>
+  </eClassifiers>
+</ecore:EPackage>

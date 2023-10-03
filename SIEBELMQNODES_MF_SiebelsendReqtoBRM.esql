@@ -1,0 +1,57 @@
+
+
+CREATE COMPUTE MODULE SIEBELMQNODES_MF_SiebelsendReqtoBRM
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		--it will keep msgid asitis tosend brm response
+		 CALL CopyMessageHeaders();
+		-- CALL CopyEntireMessage();
+		                               
+		--storing siebel responsequeuedetails                               
+		 SET Environment.Variables.MQMD =InputRoot.MQMD;                              
+		                               
+	--	this is EAI(OUR)queue MOBILY.FUNC.BRM.BALANCE.INQ.RES     setting reply Q name to receive brmresponse
+		SET OutputRoot.MQMD.ReplyToQ ='MOBILY.FUNC.BRM.BALANCE.INQ.RES';
+		SET OutputRoot.MQMD.ReplyToQMgr = QueueManagerName;
+		
+		CREATE FIELD OutputRoot.XMLNSC.MOBILY_BK_SR.SR_BK_HEADER;
+		DECLARE outref REFERENCE TO OutputRoot.XMLNSC.MOBILY_BK_SR.SR_BK_HEADER;
+		DECLARE inref REFERENCE TO InputRoot.XMLNSC.MOBILY_BSL_SR.SR_HEADER;
+		
+		SET outref.MsgFormate 				=inref.MsgFormate;
+		SET outref.MsgVersion 				=inref.MsgVersion;
+		SET outref.RequestorUserID 			=inref.RequestorUserID;
+		SET outref.RequestorChannelID 		=inref.RequestorChannelID;
+		SET outref.RequestorLanguage 		=inref.RequestorLanguage;
+		SET outref.RequestorChannelFunction =inref.RequestorChannelFunction;
+		SET outref.RequestorSecurityInfo 	=inref.RequestorSecurityInfo;
+		SET outref.ChannelTransformationID  =inref.ChannelTransformationID;
+		
+		--20220818035501 TO 2022-08-18-03-55-01 DATEFORMAT yyyy-MM-DD T HH:mm:ss
+		SET outref.SrDate =SUBSTRING(inref.SrDate FROM 1 FOR 4)||'-'||SUBSTRING(inref.SrDate FROM 5 FOR 2)||'-'||
+		                   SUBSTRING(inref.SrDate FROM 7 FOR 2)||'T'||SUBSTRING(inref.SrDate FROM 9 FOR 2)||':'||
+		                   SUBSTRING(inref.SrDate FROM 11 FOR 2)||':'||SUBSTRING(inref.SrDate FROM 13 FOR 2);
+		
+		
+		SET OutputRoot.XMLNSC.MOBILY_BK_SR.Linenumber =InputRoot.XMLNSC.MOBILY_BSL_SR.MSISDN;
+		
+		
+		
+		
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		SET OutputRoot = InputRoot;
+	END;
+END MODULE;
